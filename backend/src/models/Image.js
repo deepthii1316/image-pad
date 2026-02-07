@@ -31,10 +31,6 @@ const imageSchema = new mongoose.Schema({
   },
   bytes: {
     type: Number
-  },
-  uploadedAt: {
-    type: Date,
-    default: Date.now
   }
 }, {
   timestamps: true

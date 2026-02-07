@@ -11,9 +11,13 @@ function App() {
     setUploadResult(result);
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    alert('Key copied to clipboard!');
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('Key copied to clipboard!');
+    } catch (err) {
+      alert('Failed to copy key. Please copy it manually.');
+    }
   };
 
   return (

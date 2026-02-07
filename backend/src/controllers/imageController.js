@@ -17,8 +17,23 @@ export const uploadImage = async (req, res, next) => {
       });
     }
 
-    // Generate unique key
-    const key = generateUniqueKey();
+    // Generate unique key with collision check
+    let key;
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    while (attempts < maxAttempts) {
+      key = generateUniqueKey();
+      const existingImage = await Image.findOne({ key });
+      if (!existingImage) {
+        break;
+      }
+      attempts++;
+    }
+    
+    if (attempts === maxAttempts) {
+      throw new Error('Failed to generate unique key. Please try again.');
+    }
 
     // Upload to Cloudinary
     const result = await new Promise((resolve, reject) => {
@@ -88,7 +103,7 @@ export const getImageByKey = async (req, res, next) => {
         format: image.format,
         width: image.width,
         height: image.height,
-        uploadedAt: image.uploadedAt
+        uploadedAt: image.createdAt
       }
     });
   } catch (error) {
@@ -107,7 +122,7 @@ export const getAllImages = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .select('key secureUrl format uploadedAt');
+      .select('key secureUrl format createdAt');
 
     const total = await Image.countDocuments();
 

@@ -54,7 +54,7 @@ Create a `.env` file in the backend directory:
 
 ```env
 PORT=5000
-NODE_ENV=production
+NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/image-pad
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
